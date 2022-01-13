@@ -41,7 +41,7 @@ addSbtPlugin("a8" % "sbt-a8" % "1.1.0-20210930_1248")
 addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
 
 
-addSbtPlugin("ch.epfl.scala" % "sbt-scala3-migrate" % "0.5.0")
+//addSbtPlugin("ch.epfl.scala" % "sbt-scala3-migrate" % "0.5.0")
 
   def readRepoUrl() = readRepoProperty("repo_url")
 

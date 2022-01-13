@@ -22,8 +22,10 @@ object MapperBuilder {
 
   }
 
-  def apply[A : ClassTag,B](generator: Generator[A,B]): MapperBuilder[A,B,Unit] =
+  def apply[A : ClassTag,B](generator: Generator[A,B]): MapperBuilder[A,B,Unit] = {
+    import sourcecode.Text.generate
     MapperBuilderImpl[A,B,Unit](generator, None)
+  }
 
   sealed trait Parm[A] {
     val name: String
@@ -44,7 +46,7 @@ object MapperBuilder {
   case class MapperBuilderImpl[A : ClassTag,B,PK](
     generator: Generator[A,B],
     primaryKey: Option[PrimaryKey[A,PK]] = None,
-    fields: Vector[Parm[A]] = Vector.empty,
+    fields: Vector[Parm[A]] = Vector(),
     tableName: Option[TableName] = None
   ) extends MapperBuilder[A,B,PK] {
 

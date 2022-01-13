@@ -53,7 +53,7 @@ object Batcher {
 
 
 trait Batcher[F[_],A] {
-  val sql: ResolvedSql
+  def sql: ResolvedSql
   def execBatch(stream: fs2.Stream[F,A]): fs2.Stream[F,Int]
 }
 

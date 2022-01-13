@@ -106,7 +106,7 @@ trait SharedImports
   implicit def fStreamOps[F[_] : Async,A](strF: F[fs2.Stream[F,A]]): FStreamOps[F,A] =
     new FStreamOps[F,A](strF)
 
-  implicit def streamOps[F[_] : Async,A](str: fs2.Stream[F,A]): StreamOps[F[_],A] =
+  implicit def streamOps[F[_] : Async,A](str: fs2.Stream[F,A]): StreamOps[F,A] =
     new StreamOps(str)
 
   implicit def sharedImportsIntOps(i: Int): IntOps =

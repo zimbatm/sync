@@ -6,11 +6,11 @@ import a8.shared.SharedImports._
 
 object EnumCodecBuilder {
 
-  def apply[A <: enumeratum.values.StringEnumEntry](enum: enumeratum.values.StringEnum[A]): JsonCodec[A] =
+  def apply[A <: enumeratum.values.StringEnumEntry](enum0: enumeratum.values.StringEnum[A]): JsonCodec[A] =
     new JsonCodec[A] {
 
       lazy val enumValuesByName =
-        enum
+        enum0
           .values
           .map(e => e.value.toCi -> e)
           .toMap
@@ -32,11 +32,11 @@ object EnumCodecBuilder {
         }
     }
 
-  def apply[A <: enumeratum.EnumEntry](enum: enumeratum.Enum[A]): JsonCodec[A] =
+  def apply[A <: enumeratum.EnumEntry](enum0: enumeratum.Enum[A]): JsonCodec[A] =
     new JsonCodec[A] {
 
       lazy val enumValuesByName =
-        enum
+        enum0
           .values
           .map(e => e.entryName.toCi -> e)
           .toMap

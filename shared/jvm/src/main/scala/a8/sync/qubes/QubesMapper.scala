@@ -37,7 +37,7 @@ object QubesMapper {
     override def fetchOpt[F[_] : QubesApiClient : Async](key: B)(implicit sqlStringer: SqlStringer[B]): F[Option[A]] = {
       val F = Async[F]
       val qubesApiClient = implicitly[QubesApiClient[F]]
-      implicit def qm = this
+      implicit def qm: QubesKeyedMapper[A,B] = this
       import SqlString._
       qubesApiClient
         .query[A](primaryKey.whereClause(key))

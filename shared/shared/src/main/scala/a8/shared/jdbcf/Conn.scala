@@ -81,7 +81,7 @@ object Conn extends LazyLogger {
 
 trait Conn[F[_]] {
 
-  val jdbcUrl: Uri
+  def jdbcUrl: Uri
 
   implicit lazy val dialect: Dialect = Dialect(jdbcUrl)
 

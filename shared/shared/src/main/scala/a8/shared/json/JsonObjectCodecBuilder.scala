@@ -28,7 +28,7 @@ object JsonObjectCodecBuilder {
     JsonObjectCodecBuilderImpl(generator)
 
 
-  case class JsonObjectCodecBuilderImpl[A,B](generator: Generator[A,B], parms: Vector[Parm[A]] = Vector.empty) extends JsonObjectCodecBuilder[A,B] {
+  case class JsonObjectCodecBuilderImpl[A,B](generator: Generator[A,B], parms: Vector[Parm[A]] = Vector()) extends JsonObjectCodecBuilder[A,B] {
 
     override def addField[C : JsonCodec](fn: B => CaseClassParm[A, C]): JsonObjectCodecBuilder[A, B] =
       copy(parms = parms :+ CaseClassParmParm(fn(generator.caseClassParameters)))

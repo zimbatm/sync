@@ -57,7 +57,7 @@ object QubesMapperBuilder {
     generator: Generator[A,B],
     cubeName: Option[String] = None,
     appSpace: Option[String] = None,
-    parms: Vector[Parm[A]] = Vector.empty,
+    parms: Vector[Parm[A]] = Vector.empty[Parm[A]],
     primaryKey: Option[PrimaryKey[A,PK]] = None,
   )(
     implicit

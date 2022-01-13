@@ -19,9 +19,10 @@
 // 
 //      
 
-val scalaLibVersion = "2.13.6"
+val scalaLibVersion = "3.1.0"
+//val scalaLibVersion = "2.13.6"
 
-scalacOptions in Global ++= Seq("-deprecation", "-unchecked", "-feature")
+//scalacOptions in Global ++= Seq("-deprecation", "-unchecked", "-feature")
 
 resolvers in Global += "a8-repo" at Common.readRepoUrl()
 
@@ -29,6 +30,7 @@ publishTo in Global := Some("a8-repo-releases" at Common.readRepoUrl())
 //publishTo in Global := sonatypePublishToBundle.value
 //credentials in Global += Credentials(Path.userHome / ".sbt" / "sonatype.credentials")
 
+ThisBuild / scalaVersion := scalaLibVersion
 scalaVersion in Global := scalaLibVersion
 
 organization in Global := "io.accur8"
@@ -43,7 +45,7 @@ serverConnectionType in Global := ConnectionType.Local
 lazy val api =
   Common
     .jvmProject("a8-sync-api", file("api"), "api")
-    .dependsOn(sharedJVM)
+    .dependsOn(shared)
     .settings(
       libraryDependencies ++= Seq(
         "co.fs2" %% "fs2-io" % "3.2.4",
@@ -56,13 +58,15 @@ lazy val api =
 
 lazy val shared =
   Common
-    .crossProject("a8-sync-shared", file("shared"), "shared")
+    .jvmProject("a8-sync-shared", file("shared"), "shared")
     .settings(
+      Compile / unmanagedSourceDirectories  += (baseDirectory( _ / "jvm/src/main/scala" )).value,
+      Compile / unmanagedSourceDirectories  += (baseDirectory( _ / "shared/src/main/scala" )).value,
       libraryDependencies ++= Seq(
         "com.softwaremill.sttp.client3" %% "core" % "3.3.18",
         "com.softwaremill.sttp.client3" %% "async-http-client-backend-cats" % "3.3.18",
         "com.github.cb372" %%% "cats-retry" % "3.1.0",
-        "com.beachape" %%% "enumeratum" % "1.7.0",
+        ("com.beachape" %%% "enumeratum" % "1.7.0").cross(CrossVersion.for3Use2_13),
         "com.lihaoyi" %%% "sourcecode" % "0.2.7",
         "org.typelevel" %% "case-insensitive" % "1.2.0",
         "org.typelevel" %% "cats-effect" % "3.3.4",
@@ -81,14 +85,17 @@ lazy val shared =
         "com.sun.mail" % "jakarta.mail" % "2.0.1",
       )
     )
-
-lazy val sharedJVM = shared.jvm
+//    .jsSettings(
+//      libraryDependencies ++= Seq(
+//        "org.scala-js" %%% "scalajs-dom" % "2.1.0",
+//      )
+//    )
 
 lazy val root =
   Common.jvmProject("root", file("target/root"), id = "root")
     .settings( publish := {} )
     .aggregate(api)
-    .aggregate(sharedJVM)
+    .aggregate(shared)
 
 
 

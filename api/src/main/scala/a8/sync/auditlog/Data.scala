@@ -32,8 +32,7 @@ case class Data(
     IO{
       val file = dataFile(tableName)
       if ( !file.exists() ) {
-        val r = file.createNewFile()
-        r
+        file.createNewFile()
       }
       val writer: BufferedWriter = new BufferedWriter(new FileWriter(file.getCanonicalPath, false))
       writer.write(version.value.toString)

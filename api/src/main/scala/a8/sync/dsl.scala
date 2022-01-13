@@ -26,6 +26,8 @@ import language.higherKinds
  DONE do some JNumber mangling to the same type(s) probly JDecimal so that keys and equals "just works (tm)"
 
  */
+
+
 object dsl {
 
   case class Mapping(
@@ -95,7 +97,7 @@ object dsl {
 
   sealed abstract class TruncateAction(val logLevel: Option[LogLevel]) extends enumeratum.EnumEntry
   object TruncateAction extends enumeratum.Enum[TruncateAction] {
-    val values = findValues
+    val values: IndexedSeq[TruncateAction] = ???
 
     case object Error extends TruncateAction(Some(LogLevel.ERROR))
     case object Warn extends TruncateAction(Some(LogLevel.WARN))

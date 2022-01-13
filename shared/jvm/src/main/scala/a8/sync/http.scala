@@ -115,7 +115,7 @@ object http extends LazyLogger {
 
   object RequestProcessor {
 
-    def apply[F[_] : Async](retry: RetryConfig, backend: SttpBackend[F, Any], maxConnectionSemaphore: Semaphore[F]): RequestProcessorImpl[F[_]] =
+    def apply[F[_] : Async](retry: RetryConfig, backend: SttpBackend[F, Any], maxConnectionSemaphore: Semaphore[F]): RequestProcessorImpl[F] =
       RequestProcessorImpl(retry, backend, maxConnectionSemaphore)
 
     case class RequestProcessorImpl[F[_] : Async](

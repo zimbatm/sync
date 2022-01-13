@@ -24,7 +24,7 @@ object AuditLog {
     case object Update extends RowAction
     case object Delete extends RowAction
 
-    implicit val rowMapper: RowReader[RowAction] =
+    implicit val rowReader: RowReader[RowAction] =
       RowReader.singleColumnReader[RowAction] {
         case "i" => Insert
         case "u" => Update
@@ -41,7 +41,7 @@ object AuditLog {
 
   object Version extends SingleArgConstructor.Companion[Long,Version] {
 
-    implicit val rowMapper: RowReader[Version] =
+    implicit lazy val rowMapper: RowReader[Version] =
       RowReader.singleColumnReader[Version] {
         case i: java.lang.Number =>
           Version(i.longValue())
