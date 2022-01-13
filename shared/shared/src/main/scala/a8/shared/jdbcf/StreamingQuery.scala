@@ -15,7 +15,7 @@ object StreamingQuery {
 
   case class Impl[F[_] : Async, A : RowReader](conn: ConnInternal[F], sql: ResolvedSql, batchSize: Int) extends StreamingQuery[F,A] {
 
-    val F = Async[F]
+    val F: Async[F] = Async[F]
 
     override val reader: RowReader[A] = implicitly[RowReader[A]]
 

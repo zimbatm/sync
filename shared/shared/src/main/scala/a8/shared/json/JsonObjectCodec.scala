@@ -23,7 +23,7 @@ class JsonObjectCodec[A](
   constructors: Constructors[A],
 ) extends JsonTypedCodec[A,JsObj] {
 
-  lazy val parmsByName = parms.toMapTransform(_.name)
+  lazy val parmsByName: Map[String,Parm[A]] = parms.toMapTransform(_.name)
 
   override def write(a: A): ast.JsObj = {
     JsObj(

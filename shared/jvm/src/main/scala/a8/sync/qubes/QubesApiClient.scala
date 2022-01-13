@@ -26,9 +26,9 @@ object QubesApiClient extends Logging {
     implicitly[QubesApiClient[F]]
 
   object Config extends MxConfig {
-    val fiveSeconds = 5.seconds
-    val twentySeconds = 20.seconds
-    val defaultRetryConfig =
+    val fiveSeconds: FiniteDuration = 5.seconds
+    val twentySeconds: FiniteDuration = 20.seconds
+    val defaultRetryConfig: RetryConfig =
       RetryConfig(
         count = 0,
         initialBackoff = 2.seconds,
@@ -194,10 +194,10 @@ class QubesApiClient[F[_] : Async](
   import QubesApiClient._
 
   object impl {
-    val F = Async[F]
+    val F: Async[F] = Async[F]
 
     implicit lazy val requestProcessor: RequestProcessor[F] = RequestProcessor(config.retry, sttpBackend, maxConnectionSemaphore)
-    lazy val baseRequest = http.Request(config.uri).addHeader("X-SESS", config.authToken.value)
+    lazy val baseRequest: http.Request = http.Request(config.uri).addHeader("X-SESS", config.authToken.value)
 
     def executeA[A: JsonCodec, B: JsonCodec](subPath: Uri, requestBody: A): F[B] =
       F.defer {

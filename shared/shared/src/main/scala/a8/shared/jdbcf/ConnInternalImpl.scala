@@ -20,11 +20,11 @@ case class ConnInternalImpl[F[_] : Async](
   with ConnInternal[F]
 {
 
-  val F = Async[F]
+  val F: Async[F] = Async[F]
 
   override def asInternal: ConnInternal[F] = this
 
-  lazy val jdbcUrl = Uri.unsafeParse(jdbcConn.getMetaData.getURL)
+  lazy val jdbcUrl: Uri = Uri.unsafeParse(jdbcConn.getMetaData.getURL)
 
   override def resolve(sql: SqlString): ResolvedSql =
     SqlString.unsafe.resolve(sql)

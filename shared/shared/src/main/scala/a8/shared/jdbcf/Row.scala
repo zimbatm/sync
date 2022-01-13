@@ -26,7 +26,7 @@ object Row {
   }
 
   case class Metadata(columnNames: Vector[String]) {
-    lazy val ciColumnNames = columnNames.map(CIString.apply)
+    lazy val ciColumnNames: Vector[CIString] = columnNames.map(CIString.apply)
     lazy val columnIndexesByName: Map[CIString, Int] = ciColumnNames.iterator.zipWithIndex.map(t => t._1 -> t._2).toMap
     def columnIndex(name: String): Int =
       columnIndexesByName
@@ -36,7 +36,7 @@ object Row {
         )
   }
 
-  implicit val rowReader =
+  implicit val rowReader: RowReader[Row] =
     new RowReader[Row] {
       override def rawRead(row: Row, index: Int): (Row, Int) = {
         val subRow = row.subRow(index)
@@ -47,14 +47,14 @@ object Row {
 
 trait Row { outer =>
 
-  def columnIndex(name: String) = metadata.columnIndex(name)
+  def columnIndex(name: String): Int = metadata.columnIndex(name)
 
   def size = values.size
 
   protected val metadata: Row.Metadata
   protected val values: Chunk[AnyRef]
 
-  lazy val unsafeAsJsObj = {
+  lazy val unsafeAsJsObj: JsObj = {
     JsObj(
       metadata
         .columnNames
@@ -92,7 +92,7 @@ trait Row { outer =>
   def get[T](i: Int)(implicit mapper: RowReader[T]): T = mapper.read(this, i)
   def get[T](name: String)(implicit mapper: RowReader[T]): T = mapper.read(this, columnIndex(name))
 
-  def subRow(start: Int) =
+  def subRow(start: Int): Row =
     if ( start == 0 )
       this
     else
@@ -101,7 +101,7 @@ trait Row { outer =>
         override protected val values: Chunk[AnyRef] = outer.values.drop(start)
       }
 
-  override def toString = {
+  override def toString: String = {
     try {
       s"Row(${values.map(_.toString).mkString(",")})"
     } catch {

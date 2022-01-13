@@ -64,7 +64,7 @@ object CatsUtils {
     import builder._
 
     object impl {
-      val F = Async[F]
+      val F: Async[F] = Async[F]
     }
 
     import impl._

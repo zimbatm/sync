@@ -29,10 +29,10 @@ object SqlStringLowPrio {
   }
 
   class StringOpsSqlString(private val v: String) extends AnyVal {
-    def keyword = SqlString.unsafe.rawSqlString(v)
-    def identifier = SqlString.DialectQuotedIdentifier(v)
-    def escape = SqlString.EscapedSqlString(v)
-    def unsafeUnEscaped = SqlString.unsafe.rawSqlString(v)
+    def keyword: SqlString.RawSqlString = SqlString.unsafe.rawSqlString(v)
+    def identifier: SqlString.DialectQuotedIdentifier = SqlString.DialectQuotedIdentifier(v)
+    def escape: SqlString.EscapedSqlString = SqlString.EscapedSqlString(v)
+    def unsafeUnEscaped: SqlString.RawSqlString = SqlString.unsafe.rawSqlString(v)
   }
 
   class IterableSqlString[A <: SqlString](private val iterable: Iterable[A]) extends AnyVal {
@@ -68,7 +68,7 @@ trait SqlStringLowPrio {
 
   implicit def stringOpsSqlString(s: String): StringOpsSqlString = new StringOpsSqlString(s)
 
-  implicit def sqlStringContextImplicit(sc: StringContext) =
+  implicit def sqlStringContextImplicit(sc: StringContext): SqlFragmentContext =
     new SqlFragmentContext(sc)
 
   implicit def liftJdbcColumn(jdbcColumn: JdbcColumn): SqlString = {

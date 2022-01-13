@@ -9,12 +9,12 @@ import a8.shared.SharedImports._
 
 class StringOps(private val source: String) extends AnyVal {
 
-  def isNotBlank = source.exists(!_.isWhitespace)
-  def isBlankX = source.trim.length == 0
-  def toCi = CIString(source)
+  def isNotBlank: Boolean = source.exists(!_.isWhitespace)
+  def isBlankX: Boolean = source.trim.length == 0
+  def toCi: CIString = CIString(source)
   def =:=(right: String) = source.equalsIgnoreCase(right)
-  def rtrim = source.replaceAll("\\s+$", "")
-  def toUri = Uri.unsafeParse(source)
+  def rtrim: String = source.replaceAll("\\s+$", "")
+  def toUri: Uri = Uri.unsafeParse(source)
 
   def toChunk: fs2.Chunk[Byte] =
     fs2.Chunk.array(
@@ -27,7 +27,7 @@ class StringOps(private val source: String) extends AnyVal {
       .covary[F]
   }
 
-  def indent(indent: String) =
+  def indent(indent: String): String =
     source
       .linesIterator.map(indent + _)
       .mkString("\n")

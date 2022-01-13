@@ -27,7 +27,7 @@ object MapperBuilder {
 
   sealed trait Parm[A] {
     val name: String
-    lazy val columnName = ColumnName(name)
+    lazy val columnName: ColumnName = ColumnName(name)
     val ordinal: Int
     def rawRead(row: Row, index: Int): (Any, Int)
     def sqlString(a: A): SqlString
@@ -93,7 +93,7 @@ object MapperBuilder {
     extends PrimaryKey[A,B]
   {
     override def key(a: A): B = parm.parm.lens(a)
-    override val columnNames = Iterable(parm.columnName)
+    override val columnNames: Iterable[ColumnName] = Iterable(parm.columnName)
     override def whereClause(b: B): SqlString = sql"${parm.columnName} = ${implicitly[SqlStringer[B]].toSqlString(b)}"
   }
 
@@ -104,7 +104,7 @@ object MapperBuilder {
     extends PrimaryKey[A,(B1,B2)]
   {
     override def key(a: A): (B1,B2) = parm0.parm.lens(a) -> parm1.parm.lens(a)
-    override val columnNames = Iterable(parm0.columnName, parm1.columnName)
+    override val columnNames: Iterable[ColumnName] = Iterable(parm0.columnName, parm1.columnName)
 
     override def whereClause(b: (B1,B2)): SqlString =
       sql"${parm0.columnName} = ${implicitly[SqlStringer[B1]].toSqlString(b._1)} and ${parm1.columnName} = ${implicitly[SqlStringer[B2]].toSqlString(b._2)}"

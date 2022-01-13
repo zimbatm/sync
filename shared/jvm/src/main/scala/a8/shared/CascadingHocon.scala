@@ -61,17 +61,17 @@ object CascadingHocon extends Logging {
 
 case class CascadingHocon(config: Config, sources: Vector[Path], directoriesChecked: Vector[Path], parent: Option[CascadingHocon]) {
 
-  def resolve =
+  def resolve: CascadingHocon =
     copy(
       config = config.resolve()
     )
 
-  def appendCheckedDir(path: Path) =
+  def appendCheckedDir(path: Path): CascadingHocon =
     copy(
       directoriesChecked = directoriesChecked :+ path
     )
 
-  def appendConfig(config: Config, path: Path) =
+  def appendConfig(config: Config, path: Path): CascadingHocon =
     copy(
       config = config.withFallback(this.config),
       sources = sources :+ path

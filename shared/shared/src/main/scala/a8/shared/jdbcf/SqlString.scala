@@ -7,9 +7,9 @@ import scala.language.implicitConversions
 
 object SqlString extends SqlStringLowPrio {
 
-  val DoubleQuote = '"'.toString
+  val DoubleQuote: String = '"'.toString
   val Null: SqlString = keyword("null")
-  val Comma = keyword(",")
+  val Comma: SqlString = keyword(",")
 
 
   case object Empty extends SqlString
@@ -29,7 +29,7 @@ object SqlString extends SqlStringLowPrio {
 
   object unsafe {
 
-    def rawSqlString(s: String) = RawSqlString(s)
+    def rawSqlString(s: String): RawSqlString = RawSqlString(s)
 
     def resolve(sqlString: SqlString)(implicit dialect: Dialect): ResolvedSql = {
       implicit val ctx = Context(dialect)
@@ -181,5 +181,5 @@ object SqlString extends SqlStringLowPrio {
 }
 
 sealed trait SqlString {
-  override def toString = SqlString.unsafe.resolve(this)(Dialect.Default).value
+  override def toString: String = SqlString.unsafe.resolve(this)(Dialect.Default).value
 }

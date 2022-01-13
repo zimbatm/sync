@@ -23,7 +23,7 @@ object StringValue {
         _.value.toString,
       )
 
-    implicit lazy val rowReader = RowReader.stringReader.map(s => apply(s.trim))
+    implicit lazy val rowReader: RowReader[A] = RowReader.stringReader.map(s => apply(s.trim))
 
     implicit def toSqlString(a: A): SqlString =
       SqlString.escapedString(a.value)
@@ -46,13 +46,13 @@ object StringValue {
     implicit val catsEq: cats.kernel.Eq[A] =
       cats.kernel.Eq.by[A,CIString](_.value)
 
-    implicit val jsonCodec =
+    implicit val jsonCodec: JsonTypedCodec[A,ast.JsStr] =
       JsonCodec.string.dimap[A](
         apply _,
         _.value.toString,
       )
 
-    implicit val rowMapper = RowReader.stringReader.map(s => apply(s.trim))
+    implicit val rowMapper: RowReader[A] = RowReader.stringReader.map(s => apply(s.trim))
 
     implicit def toSqlString(a: A): SqlString =
       SqlString.escapedString(a.asString)

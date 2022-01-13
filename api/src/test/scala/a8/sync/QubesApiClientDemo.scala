@@ -22,8 +22,8 @@ object QubesApiClientDemo extends BootstrappedIOApp {
   )
 
 
-  lazy val config = Utils.config.load[QubesApiClient.Config]("QubesApiClientDemo.json")
-  lazy val qubesApiClientR = QubesApiClient.asResource[IO](config)
+  lazy val config: QubesApiClient.Config = Utils.config.load[QubesApiClient.Config]("QubesApiClientDemo.json")
+  lazy val qubesApiClientR: Resource[IO,QubesApiClient[IO]] = QubesApiClient.asResource[IO](config)
 
   override def run: IO[Unit] = {
     val result =

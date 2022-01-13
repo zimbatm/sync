@@ -80,8 +80,8 @@ object http extends LazyLogger {
   }
 
   object Method {
-    val GET = Method("GET")
-    val POST = Method("POST")
+    val GET: Method = Method("GET")
+    val POST: Method = Method("POST")
   }
 
   case class Method(
@@ -115,7 +115,7 @@ object http extends LazyLogger {
 
   object RequestProcessor {
 
-    def apply[F[_] : Async](retry: RetryConfig, backend: SttpBackend[F, Any], maxConnectionSemaphore: Semaphore[F]) =
+    def apply[F[_] : Async](retry: RetryConfig, backend: SttpBackend[F, Any], maxConnectionSemaphore: Semaphore[F]): RequestProcessorImpl[F[_]] =
       RequestProcessorImpl(retry, backend, maxConnectionSemaphore)
 
     case class RequestProcessorImpl[F[_] : Async](
@@ -137,7 +137,7 @@ object http extends LazyLogger {
           )
       }
 
-      val F = Async[F]
+      val F: Async[F] = Async[F]
 
       override def exec[A](request: Request): F[String] =
         execAndMap(request)(F.pure)

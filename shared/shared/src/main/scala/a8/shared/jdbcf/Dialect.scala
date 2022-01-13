@@ -92,7 +92,7 @@ trait Dialect {
 
 object Dialect {
 
-  val duobleQuote = Chord.str('"'.toString)
+  val duobleQuote: Chord = Chord.str('"'.toString)
 
   case object Default extends Dialect
 

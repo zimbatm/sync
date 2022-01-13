@@ -8,7 +8,7 @@ import a8.shared.SharedImports._
 
 object DynamicJson {
 
-  val empty = DynamicJson(JsNull)
+  val empty: DynamicJson = DynamicJson(JsNull)
 
   def fromIterable(iter: Iterable[DynamicJson]): DynamicJson =
     DynamicJson(JsArr(iter.map(_.__.asJsVal).toList))
@@ -171,7 +171,7 @@ object DynamicJson {
       }
     }
 
-    def isEmpty =
+    def isEmpty: Boolean =
       wrappedValue match {
         case JsArr(List()) | JsNull | JsNothing =>
           true
@@ -210,7 +210,7 @@ object DynamicJson {
         case _ => JsNothing
       }
 
-    def error(msg: String) =
+    def error(msg: String): Nothing =
       sys.error(msg)
 
     def as[A : JsonCodec]: A =
@@ -240,12 +240,12 @@ class DynamicJson(wrappedValue: JsVal, parent: Option[(DynamicJson, Either[Strin
       .flatMap { _.values.find(_._1 =:= name) }
       .map(t => new DynamicJson(t._2, Some(this -> Left(name))))
 
-  def apply(name: String) = selectDynamic(name)
-  def apply(index: Int) = __.asArray(index)
+  def apply(name: String): DynamicJson = selectDynamic(name)
+  def apply(index: Int): DynamicJson = __.asArray(index)
 
   override def toString: String =
     __.asPrettyStr
 
-  def __ = DynamicJsonOps(this, wrappedValue, parent)
+  def __ : DynamicJsonOps = DynamicJsonOps(this, wrappedValue, parent)
 
 }

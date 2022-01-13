@@ -5,7 +5,7 @@ import a8.shared.SharedImports._
 
 class FStreamOps[F[_] : Async,A](streamF: F[fs2.Stream[F,A]]) {
 
-  def toStream =
+  def toStream: fs2.Stream[F[x],A] =
     fs2.Stream.eval(streamF).flatten
 
 }

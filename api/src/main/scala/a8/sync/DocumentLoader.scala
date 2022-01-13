@@ -16,7 +16,7 @@ object DocumentLoader {
 
   case class CacheableLoader[F[_] : Async](cacheDuration: Duration, loader: DocumentLoader[F]) extends AbstractDocumentLoader[F] {
 
-    val F = Async[F]
+    val F: Async[F] = Async[F]
 
     val lastLoad = new AtomicReference[Option[(LocalDateTime, JsVal)]](None)
 
@@ -34,7 +34,7 @@ object DocumentLoader {
           }
       }
 
-    def load = {
+    def load: F[JsVal] = {
       F.defer {
         cachedValue match {
           case Some(value) =>
@@ -111,7 +111,7 @@ object DocumentLoader {
   }
 
   abstract class AbstractDocumentLoader[F[_] : Async] extends DocumentLoader[F] {
-    def loadAsDynamicJson = load.map(DynamicJson.apply)
+    def loadAsDynamicJson: F[DynamicJson] = load.map(DynamicJson.apply)
 
   }
 

@@ -4,7 +4,7 @@ import cats.effect.IO
 
 object BootstrappedIOAppDemo extends BootstrappedIOApp("demo") {
 
-  lazy val loggerIO2 = LoggerF.create[IO]
+  lazy val loggerIO2: LoggerF[IO] = LoggerF.create[IO]
 
   override def run: IO[Unit] = (
     loggerIO.info("hello world from loggerIO")

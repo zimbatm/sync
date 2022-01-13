@@ -74,10 +74,6 @@ lazy val shared =
         "org.scalatest" %% "scalatest" % "3.2.10" % "test",
         "org.typelevel" %% "jawn-parser" % "1.3.2",
         "org.typelevel" %% "jawn-ast" % "1.3.2",
-      )
-    )
-    .jvmSettings(
-      libraryDependencies ++= Seq(
         "com.github.andyglow" %% "typesafe-config-scala" % "2.0.0",
         "org.postgresql" % "postgresql" % "42.3.1",
         "net.sf.jt400" % "jt400" % "10.7",
@@ -85,21 +81,13 @@ lazy val shared =
         "com.sun.mail" % "jakarta.mail" % "2.0.1",
       )
     )
-    .jsSettings(
-      libraryDependencies ++= Seq(
-        "org.scala-js" %%% "scalajs-dom" % "1.2.0",
-      )
-    )
 
 lazy val sharedJVM = shared.jvm
-lazy val sharedJS = shared.js
-
 
 lazy val root =
   Common.jvmProject("root", file("target/root"), id = "root")
     .settings( publish := {} )
     .aggregate(api)
-    .aggregate(sharedJS)
     .aggregate(sharedJVM)
 
 

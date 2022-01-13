@@ -14,10 +14,10 @@ abstract class BootstrappedIOApp(defaultAppName: String = getClass.shortName.toL
   lazy val resolvedAppName: AppName =
     AppName(System.getProperty("appname", defaultAppName))
 
-  lazy val bootstrapper = Bootstrapper(resolvedAppName)
+  lazy val bootstrapper: Bootstrapper = Bootstrapper(resolvedAppName)
   lazy val bootstrapConfig = bootstrapper.bootstrapConfig
 
-  lazy val appInit = {
+  lazy val appInit: Unit = {
 
     // make sure bootstrap is complete
     bootstrapInit

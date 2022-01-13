@@ -16,7 +16,7 @@ object ast {
   sealed trait JsVal extends JsValMixin
 
   object JsDoc {
-    val empty = JsDoc(JsNothing, None)
+    val empty: JsDoc = JsDoc(JsNothing, None)
   }
   case class JsDoc(value: JsVal, parent: Option[(JsDoc, Either[String,Int])] = None) extends JsVal with JsDocMixin
 
@@ -24,19 +24,19 @@ object ast {
   case object JsNull extends JsVal
 
   object JsObj {
-    val empty = JsObj(Map.empty)
+    val empty: JsObj = JsObj(Map.empty)
     def from(values: (String,JsVal)*): JsObj = new JsObj(values.toMap)
   }
   case class JsObj(values: Map[String,JsVal]) extends JsVal {
     val size = values.size
     def removeField(fieldName: String): JsObj = copy(values = values - fieldName)
     def removeFields(fieldNames: String*): JsObj = copy(values = values -- fieldNames)
-    def addField(fieldName: String, value: JsVal) = copy(values = (values + (fieldName -> value)))
-    def addFields(fields: (String,JsVal)*) = copy(values = values ++ fields)
+    def addField(fieldName: String, value: JsVal): JsObj = copy(values = (values + (fieldName -> value)))
+    def addFields(fields: (String,JsVal)*): JsObj = copy(values = values ++ fields)
   }
 
   object JsArr {
-    val empty = JsArr(Nil)
+    val empty: JsArr = JsArr(Nil)
   }
   case class JsArr(values: List[JsVal]) extends JsVal {
     val size = values.size

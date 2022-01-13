@@ -15,6 +15,8 @@ import a8.shared.SharedImports._
 
 import java.nio.file.Paths
 import scala.util.Try
+import java.nio.file.Path
+import java.sql.Timestamp
 
 trait JsonTypedCodecs {
 
@@ -41,7 +43,7 @@ trait JsonTypedCodecs {
 
     }
 
-  implicit lazy val bool =
+  implicit lazy val bool: JsonTypedCodec[Boolean,JsBool] =
     create[Boolean,JsBool](
       b => if (b) JsTrue else JsFalse,
     ) {
@@ -49,7 +51,7 @@ trait JsonTypedCodecs {
       case JsFalse => false
     }
 
-  implicit lazy val uri =
+  implicit lazy val uri: JsonTypedCodec[Uri,JsStr] =
     string.dimap[Uri](
       Uri.unsafeParse,
       _.toString
@@ -62,7 +64,7 @@ trait JsonTypedCodecs {
       case JsStr(s) => s
     }
 
-  implicit lazy val long =
+  implicit lazy val long: JsonTypedCodec[Long,JsNum] =
     bigDecimal.dimap2[Long](
       _.toLongExact,
       l => BigDecimal(l),
@@ -70,8 +72,8 @@ trait JsonTypedCodecs {
 
   implicit object bigDecimal extends JsonTypedCodec[BigDecimal,JsNum] { outer =>
 
-      val typeInfo = implicitly[JsTypeInfo[JsNum]]
-      val shortName = classTag[Long].runtimeClass.shortName
+      val typeInfo: JsTypeInfo[JsNum] = implicitly[JsTypeInfo[JsNum]]
+      val shortName: String = classTag[Long].runtimeClass.shortName
 
       override def read(doc: JsDoc): Either[ReadError, BigDecimal] =
         doc.value match {
@@ -122,13 +124,13 @@ trait JsonTypedCodecs {
 
     }
 
-  implicit lazy val int =
+  implicit lazy val int: JsonTypedCodec[Int,JsNum] =
     bigDecimal.dimap2[Int](
       _.toIntExact,
       v => BigDecimal(v),
     )
 
-  implicit lazy val short =
+  implicit lazy val short: JsonTypedCodec[Short,JsNum] =
     bigDecimal.dimap2[Short](
       _.toShortExact,
       v => BigDecimal(v),
@@ -140,7 +142,7 @@ trait JsonTypedCodecs {
       override def read(doc: JsDoc): Either[ReadError, JsDoc] = Right(doc)
     }
 
-  implicit lazy val jobject =
+  implicit lazy val jobject: JsonTypedCodec[JsObj,JsObj] =
     create[JsObj,JsObj](
       jo => jo
     ) {
@@ -148,7 +150,7 @@ trait JsonTypedCodecs {
         jo
     }
 
-  implicit lazy val JsArr =
+  implicit lazy val JsArr: JsonTypedCodec[JsArr,JsArr] =
     create[JsArr,JsArr](
       ja => ja
     ) {
@@ -156,25 +158,25 @@ trait JsonTypedCodecs {
         ja
     }
 
-  implicit lazy val jsqlTimestamp =
+  implicit lazy val jsqlTimestamp: JsonTypedCodec[Timestamp,JsStr] =
     string.dimap[java.sql.Timestamp](
       s => java.sql.Timestamp.valueOf(s.replace("T", " ")),
       _.toString,
     )
 
-  implicit lazy val localDate =
+  implicit lazy val localDate: JsonTypedCodec[LocalDate,JsStr] =
     string.dimap[LocalDate](
       LocalDate.parse,
       _.toString,
     )
 
-  implicit lazy val localDateTime =
+  implicit lazy val localDateTime: JsonTypedCodec[LocalDateTime,JsStr] =
     string.dimap[LocalDateTime](
       s => LocalDateTime.parse(s),
       _.toString,
     )
 
-  implicit lazy val localTime =
+  implicit lazy val localTime: JsonTypedCodec[LocalTime,JsStr] =
     string.dimap[LocalTime](
       s => LocalTime.parse(s),
       _.toString,
@@ -207,13 +209,13 @@ trait JsonTypedCodecs {
     )
   }
 
-  implicit lazy val uuid =
+  implicit lazy val uuid: JsonTypedCodec[UUID,JsStr] =
     string.dimap[UUID](
       UUID.fromString,
       _.toString,
     )
 
-  implicit lazy val nioPath =
+  implicit lazy val nioPath: JsonTypedCodec[Path,JsStr] =
     string.dimap[java.nio.file.Path](
       s => Paths.get(s),
       _.toFile.getCanonicalPath,

@@ -21,8 +21,8 @@ object RowWriter {
       }
     }
 
-  implicit val intWriter = create[Int](ps => ps.setInt(_, _))
-  implicit val stringWriter = create[String](ps => ps.setString(_, _))
+  implicit val intWriter: RowWriter[Int] = create[Int](ps => ps.setInt(_, _))
+  implicit val stringWriter: RowWriter[String] = create[String](ps => ps.setString(_, _))
 
 }
 

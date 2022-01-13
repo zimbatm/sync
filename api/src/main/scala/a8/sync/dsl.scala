@@ -81,7 +81,7 @@ object dsl {
     syncWhereClause: DynamicJson => SqlString,
     fields: Iterable[Field],
   ) {
-    lazy val fieldsAsChunk = Chunk.array(fields.toArray)
+    lazy val fieldsAsChunk: Chunk[Field] = Chunk.array(fields.toArray)
 
     def addFields(moreFields: Iterable[Field]): Table =
       copy(fields = fields ++ moreFields)

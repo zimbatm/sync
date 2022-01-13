@@ -62,8 +62,8 @@ object JdbcMetadata {
     isAutoIncrement: Option[Boolean],
     alternativeNames: Vector[ColumnName] = Vector(),
   ) extends NamedToString {
-    def qualifiedName = resolvedTableName.qualifiedName + "." + columnName.asString
-    lazy val columnNames = alternativeNames.prepended(columnName)
+    def qualifiedName: String = resolvedTableName.qualifiedName + "." + columnName.asString
+    lazy val columnNames: Vector[ColumnName] = alternativeNames.prepended(columnName)
   }
 
   object JdbcTable {
@@ -91,7 +91,7 @@ object JdbcMetadata {
       rawRow: Row,
       origin: Option[TableLocator] = None,
   ) {
-    def locator = TableLocator(catalog, schema, tableName)
+    def locator: TableLocator = TableLocator(catalog, schema, tableName)
   }
 
   case class ResolvedJdbcTable(
@@ -102,7 +102,7 @@ object JdbcMetadata {
 //    searchSchema: Option[String]
   ) {
 
-    lazy val columns = {
+    lazy val columns: Vector[ResolvedColumn] = {
       val keysByColumnName = jdbcKeys.map(k => k.columnName -> k).iterator.toMap
       jdbcColumns.zipWithIndex.map { case (column,i) =>
         ResolvedColumn(
@@ -114,7 +114,7 @@ object JdbcMetadata {
       }
     }
 
-    lazy val keys = columns.filter(_.isPrimaryKey)
+    lazy val keys: Vector[ResolvedColumn] = columns.filter(_.isPrimaryKey)
 
     def querySql(whereExpr: Option[SqlString]): SqlString = {
       import SqlString._

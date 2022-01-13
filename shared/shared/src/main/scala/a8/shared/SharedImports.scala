@@ -26,6 +26,7 @@ import scala.concurrent.Future
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.reflect.ClassTag
 import scala.util.Try
+import java.nio.charset.Charset
 
 object SharedImports extends SharedImports
 
@@ -37,7 +38,7 @@ trait SharedImports
 
   val IsNonFatal = scala.util.control.NonFatal
 
-  lazy val Utf8Charset = java.nio.charset.Charset.forName("UTF-8")
+  lazy val Utf8Charset: Charset = java.nio.charset.Charset.forName("UTF-8")
 
   def some[A](a: A): Option[A] =
     Some(a)
@@ -69,7 +70,7 @@ trait SharedImports
 
   object ParseTimeUnit {
 
-    val timeUnitsByName = {
+    val timeUnitsByName: Map[String,TimeUnit] = {
       val fromEnum = TimeUnit.values().map(v => v.name().toLowerCase -> v).toMap
 
       (
@@ -93,64 +94,64 @@ trait SharedImports
   }
 
 
-  implicit def sharedImportsStringOps(s: String) =
+  implicit def sharedImportsStringOps(s: String): ops.StringOps =
     new a8.shared.ops.StringOps(s)
 
-  implicit def matchOpsAnyRef[A <: AnyRef](a: A) =
+  implicit def matchOpsAnyRef[A <: AnyRef](a: A): AnyOps[A] =
     new AnyOps[A](a)
 
-  implicit def matchOpsAnyVal[A <: AnyVal](a: A) =
+  implicit def matchOpsAnyVal[A <: AnyVal](a: A): AnyOps[A] =
     new AnyOps[A](a)
 
-  implicit def fStreamOps[F[_] : Async,A](strF: F[fs2.Stream[F,A]]) =
+  implicit def fStreamOps[F[_] : Async,A](strF: F[fs2.Stream[F,A]]): FStreamOps[F,A] =
     new FStreamOps[F,A](strF)
 
-  implicit def streamOps[F[_] : Async,A](str: fs2.Stream[F,A]) =
+  implicit def streamOps[F[_] : Async,A](str: fs2.Stream[F,A]): StreamOps[F[_],A] =
     new StreamOps(str)
 
-  implicit def sharedImportsIntOps(i: Int) =
+  implicit def sharedImportsIntOps(i: Int): IntOps =
     new IntOps(i)
 
-  implicit def sharedImportsOptionOps[A](o: Option[A]) =
+  implicit def sharedImportsOptionOps[A](o: Option[A]): OptionOps[A] =
     new OptionOps(o)
 
-  implicit def sharedImportsLocalDateTimeOps(localDateTime: LocalDateTime) =
+  implicit def sharedImportsLocalDateTimeOps(localDateTime: LocalDateTime): LocalDateTimeOps =
     new LocalDateTimeOps(localDateTime)
 
-  implicit def throwableOps(th: Throwable) =
+  implicit def throwableOps(th: Throwable): ThrowableOps =
     new ThrowableOps(th)
 
-  implicit def chunkOps[A](ch: Chunk[A]) =
+  implicit def chunkOps[A](ch: Chunk[A]): ChunkOps[A] =
     new ChunkOps(ch)
 
-  implicit def chunkBytesOps(ch: Chunk[Byte]) =
+  implicit def chunkBytesOps(ch: Chunk[Byte]): ChunkByteOps =
     new ChunkByteOps(ch)
 
-  implicit def sharedImportsAsyncOps[F[_] : Async, A](fa: F[A]) =
+  implicit def sharedImportsAsyncOps[F[_] : Async, A](fa: F[A]): AsyncOps[F,A] =
     new a8.shared.ops.AsyncOps[F,A](fa)
 
-  implicit def iterableOps[A](iterable: Iterable[A]) =
+  implicit def iterableOps[A](iterable: Iterable[A]): IterableOps[A,Iterable] =
     new IterableOps(iterable)
 
-  implicit def iteratorOps[A](iterator: Iterator[A]) =
+  implicit def iteratorOps[A](iterator: Iterator[A]): IteratorOps[A] =
     new IteratorOps[A](iterator)
 
-  implicit def readerOps(reader: java.io.Reader) =
+  implicit def readerOps(reader: java.io.Reader): ReaderOps =
     new ReaderOps(reader)
 
-  implicit def inputStreamOps(is: java.io.InputStream) =
+  implicit def inputStreamOps(is: java.io.InputStream): InputStreamOps =
     new InputStreamOps(is)
 
-  implicit def booleanOps(b: Boolean) =
+  implicit def booleanOps(b: Boolean): BooleanOps =
     new BooleanOps(b)
 
-  implicit def pathOps(p: Path) =
+  implicit def pathOps(p: Path): PathOps =
     new PathOps(p)
 
-  implicit def classOps[A](clazz: Class[A]) =
+  implicit def classOps[A](clazz: Class[A]): ClassOps[A] =
     new ClassOps(clazz)
 
-  implicit def toRunnable(fn: () => Unit) =
+  implicit def toRunnable(fn: () => Unit): Runnable =
     new Runnable() {
       def run() = fn()
     }
@@ -178,7 +179,7 @@ trait SharedImports
     }
   }
 
-  implicit def jsonCodecOps[A : JsonCodec](a: A) =
+  implicit def jsonCodecOps[A : JsonCodec](a: A): JsonCodecOps[A] =
     new JsonCodecOps(a)
 
   object json extends JsonImports

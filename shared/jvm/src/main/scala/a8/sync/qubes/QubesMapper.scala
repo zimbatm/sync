@@ -22,7 +22,7 @@ object QubesMapper {
     extends QubesKeyedMapper[A,B]
   {
 
-    val codecA = implicitly[JsonTypedCodec[A, JsObj]]
+    val codecA: JsonTypedCodec[A,JsObj] = implicitly[JsonTypedCodec[A, JsObj]]
 
 
     override def fetch[F[_] : QubesApiClient : Async](key: B)(implicit sqlStringer: SqlStringer[B]): F[A] =
@@ -82,7 +82,7 @@ trait QubesMapper[A] {
   val cubeName: TableName
   val appSpace: String
 
-  def qualifiedName = appSpace + "/" + cubeName.asString
+  def qualifiedName: String = appSpace + "/" + cubeName.asString
 
   def queryReq(whereClause: SqlString): QueryRequest
   def insertReq(a: A): UpdateRowRequest

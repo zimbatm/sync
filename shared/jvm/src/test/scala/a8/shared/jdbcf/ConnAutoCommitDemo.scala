@@ -9,7 +9,7 @@ import sttp.model.Uri._
 
 object ConnAutoCommitDemo extends BootstrappedIOApp {
 
-  lazy val config =
+  lazy val config: DatabaseConfig =
     DatabaseConfig(
       DatabaseId("test"),
       uri"jdbc:postgresql://localhost:5432/qubes",
@@ -18,8 +18,8 @@ object ConnAutoCommitDemo extends BootstrappedIOApp {
     )
 
 
-  lazy val autoCommitConnFactoryR = ConnFactory.resource[IO](config.copy(autoCommit = true))
-  lazy val noAutoCommitConnFactoryR = ConnFactory.resource[IO](config.copy(autoCommit = false))
+  lazy val autoCommitConnFactoryR: Resource[IO,ConnFactory[IO]] = ConnFactory.resource[IO](config.copy(autoCommit = true))
+  lazy val noAutoCommitConnFactoryR: Resource[IO,ConnFactory[IO]] = ConnFactory.resource[IO](config.copy(autoCommit = false))
 
   override def run: IO[Unit] = {
     autoCommitConnFactoryR.both(noAutoCommitConnFactoryR).use { case (autoCommitConnFactory, noAutoCommitConnFactory) =>

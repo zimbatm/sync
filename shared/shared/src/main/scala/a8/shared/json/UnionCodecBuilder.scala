@@ -15,7 +15,7 @@ object UnionCodecBuilder {
 
   case class UnionCodecBuilderType[A, B  <: A: ClassTag](name: String)(implicit jsonTypedCodec: JsonTypedCodec[B, JsObj]) extends UnionType[A] {
 
-    val classTag = scala.reflect.classTag[B]
+    val classTag: ClassTag[B] = scala.reflect.classTag[B]
 
     override def isInstanceOf(a: Any): Boolean =
       classTag.runtimeClass.isInstance(a)
@@ -47,7 +47,7 @@ object UnionCodecBuilder {
     def write(a: A): JsObj
     def isInstanceOf(a: Any): Boolean
     val name: String
-    lazy val nameJsStr = JsStr(name)
+    lazy val nameJsStr: JsStr = JsStr(name)
   }
 
   case class UnionCodecBuilderImpl[A](
@@ -55,7 +55,7 @@ object UnionCodecBuilder {
     typeFieldName: String = "__type__"
   ) extends UnionCodecBuilder[A] {
 
-    lazy val typesByName = types.map(t => t.name.toCi -> t).toMap
+    lazy val typesByName: Map[CIString,UnionType[A]] = types.map(t => t.name.toCi -> t).toMap
 
     override def typeFieldName(name: String): UnionCodecBuilder[A] =
       copy(typeFieldName = typeFieldName)

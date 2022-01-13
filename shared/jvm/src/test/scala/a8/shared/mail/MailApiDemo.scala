@@ -3,13 +3,14 @@ package a8.shared.mail
 import a8.shared.app.BootstrappedIOApp
 import cats.effect.IO
 import wvlet.log.{LogLevel, Logger}
+import a8.shared.SharedImports
 
 object MailApiDemo extends BootstrappedIOApp("mailapidemo") {
 
   Logger("com.sun.mail").setLogLevel(LogLevel.DEBUG)
   Logger("jakarta").setLogLevel(LogLevel.DEBUG)
 
-  lazy val mailConfig = MailConfig(
+  lazy val mailConfig: MailConfig = MailConfig(
     host = "smtp.gmail.com",
     port = Some(587),
     user = Some("raphael@accur8software.com"),
@@ -17,7 +18,7 @@ object MailApiDemo extends BootstrappedIOApp("mailapidemo") {
     debug = true,
   )
 
-  lazy val mailApiR = MailApi.asResource[IO](mailConfig)
+  lazy val mailApiR: SharedImports.Resource[IO,MailApi[IO]] = MailApi.asResource[IO](mailConfig)
 
   override def run: IO[Unit] = {
     mailApiR.use { mailApi =>

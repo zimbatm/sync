@@ -80,7 +80,7 @@ trait HoconOps {
 
   }
 
-  implicit def implicitConfigOps(config: Config) = new ConfigOps(config)
+  implicit def implicitConfigOps(config: Config): ConfigOps = new ConfigOps(config)
   class ConfigOps(private val config: Config) {
 
     def read[A : JsonCodec : ClassTag]: A = {
@@ -97,10 +97,10 @@ trait HoconOps {
 
   }
 
-  implicit def implicitConfigValueOps(configValue: ConfigValue) = new ConfigValueOps(configValue)
+  implicit def implicitConfigValueOps(configValue: ConfigValue): ConfigValueOps = new ConfigValueOps(configValue)
   class ConfigValueOps(private val configValue: ConfigValue) {
 
-    def asJsValue = impl.toJsVal(configValue)
+    def asJsValue: JsVal = impl.toJsVal(configValue)
 
     def read[A : JsonCodec : ClassTag]: A =
       asJsValue.unsafeAs[A]

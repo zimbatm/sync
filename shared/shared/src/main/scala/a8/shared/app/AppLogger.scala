@@ -9,7 +9,7 @@ trait AppLogger extends LazyLogger { self: BootstrappedIOApp =>
 
   val bootstrapConfig: BootstrapConfig
 
-  lazy val bootstrapInit = {
+  lazy val bootstrapInit: Unit = {
 
     def configureLogLevels() = {
 

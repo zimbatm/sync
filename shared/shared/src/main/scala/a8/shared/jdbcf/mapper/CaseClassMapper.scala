@@ -30,7 +30,7 @@ case class CaseClassMapper[A, PK](
     constructorFn(valuesIterator) -> offset
   }
 
-  lazy val selectAndFrom = {
+  lazy val selectAndFrom: SqlString = {
     val selectFields =
       fields
         .map(_.columnName)
@@ -38,7 +38,7 @@ case class CaseClassMapper[A, PK](
     sql"select ${selectFields} from ${tableName}"
   }
 
-  lazy val selectFromAndWhere = sql"${selectAndFrom} where "
+  lazy val selectFromAndWhere: SqlString = sql"${selectAndFrom} where "
 
 
 

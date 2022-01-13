@@ -18,7 +18,7 @@ object BootstrapConfig {
 
   object BootstrapConfigDto extends MxBootstrapConfigDto {
 
-    val default =
+    val default: BootstrapConfigDto =
       BootstrapConfigDto(
         consoleLogging = true.toSome,
         fileLogging = true.toSome,
@@ -29,7 +29,7 @@ object BootstrapConfig {
         defaultLogLevel = LogLevel.DEBUG.name.toSome,
       ).copy(source = Some("default"))
 
-    val empty =
+    val empty: BootstrapConfigDto =
       BootstrapConfigDto()
         .copy(source = Some("empty"))
 

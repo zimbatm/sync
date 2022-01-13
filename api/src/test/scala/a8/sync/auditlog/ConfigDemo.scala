@@ -4,7 +4,7 @@ import java.io.File
 
 object ConfigDemo extends App {
 
-  val config = Config.load(new File("."))
+  val config: Config = Config.load(new File("."))
 
   print(config)
 

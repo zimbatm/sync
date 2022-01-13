@@ -24,7 +24,7 @@ object LoggerF {
     fileName: sourcecode.FileName,
     line: sourcecode.Line,
   ) {
-    def asLogSource = LogSource(file.value, fileName.value, line.value, 0)
+    def asLogSource: LogSource = LogSource(file.value, fileName.value, line.value, 0)
   }
 
   def wrap[F[_] : Sync](logger: Logger): LoggerF[F] =
@@ -60,7 +60,7 @@ object LoggerF {
  */
 abstract class LoggerF[F[_] : Monad] {
 
-  val F = Monad[F]
+  val F: Monad[F] = Monad[F]
 
   protected def isEnabled(logLevel: LogLevel): Boolean
   protected def impl(logLevel: LogLevel, message: String, cause: Option[Throwable], pos: Pos): F[Unit]

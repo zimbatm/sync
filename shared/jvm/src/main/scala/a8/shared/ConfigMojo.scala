@@ -151,7 +151,7 @@ abstract class ConfigMojo(name: Option[String], parent: Option[ConfigMojo], hoco
     reads.read(hoconValueOpt)
   }
 
-  def selectDynamic(name: String) = apply(name)
+  def selectDynamic(name: String): ConfigMojo = apply(name)
 
   def apply(name: String): ConfigMojo = {
     def notFoundValue = new impl.ConfigMojoEmpty(name, this)

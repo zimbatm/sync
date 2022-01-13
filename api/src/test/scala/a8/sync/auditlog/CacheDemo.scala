@@ -9,7 +9,7 @@ import java.io.File
 object CacheDemo extends IOApp.Simple {
 
 
-  val cache = Data(new File("./cache"))
+  val cache: Data = Data(new File("./cache"))
 
   val tableName = "usergroupplay"
 

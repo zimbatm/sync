@@ -14,7 +14,7 @@ object ISeriesDialect extends Dialect {
   override val validationQuery: Option[SqlString] =
     Some(sql"select 1 from sysibm.sysdummy1")
 
-  val logger = Logger.of[ISeriesDialect.type]
+  val logger: Logger = Logger.of[ISeriesDialect.type]
 
   // Could derive separator from jdbc url "naming" parameter or call jdbc metadata getCatalogSeparator()
   override val schemaSeparator: SqlString = SqlString.operator("/")

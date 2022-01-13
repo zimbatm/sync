@@ -22,7 +22,7 @@ object LongValue {
         _.value,
       )
 
-    implicit lazy val rowReader = RowReader.longReader.map(v => apply(v))
+    implicit lazy val rowReader: RowReader[A] = RowReader.longReader.map(v => apply(v))
 
     implicit def toSqlString(a: A): SqlString =
       SqlString.number(a.value)

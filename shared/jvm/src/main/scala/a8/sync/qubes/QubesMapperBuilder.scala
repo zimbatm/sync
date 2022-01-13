@@ -23,8 +23,8 @@ object QubesMapperBuilder {
 
   case class CaseClassParmParm[A,B : JsonCodec](caseClassParm: CaseClassParm[A,B]) extends Parm[A] {
     val name = caseClassParm.name
-    val columnName = ColumnName(name)
-    def toJson(a: A) = caseClassParm.lens(a).toJsVal
+    val columnName: ColumnName = ColumnName(name)
+    def toJson(a: A): JsVal = caseClassParm.lens(a).toJsVal
   }
 
   sealed trait PrimaryKey[A,B] {
@@ -35,7 +35,7 @@ object QubesMapperBuilder {
     parm: CaseClassParm[A,B],
   ) extends PrimaryKey[A,B] {
     import SqlString._
-    val sqlStringer = implicitly[SqlStringer[B]]
+    val sqlStringer: SqlStringer[B] = implicitly[SqlStringer[B]]
     def whereClause(primaryKey: B): SqlString = {
       sql"${parm.name.identifier} = ${sqlStringer.toSqlString(primaryKey)}"
     }
@@ -46,8 +46,8 @@ object QubesMapperBuilder {
     parmC: CaseClassParm[A,C],
   ) extends PrimaryKey[A,(B,C)] {
     import SqlString._
-    val sqlStringerB = implicitly[SqlStringer[B]]
-    val sqlStringerC = implicitly[SqlStringer[C]]
+    val sqlStringerB: SqlStringer[B] = implicitly[SqlStringer[B]]
+    val sqlStringerC: SqlStringer[C] = implicitly[SqlStringer[C]]
     override def whereClause(key: (B, C)): SqlString = {
       sql"${parmB.name.identifier} = ${sqlStringerB.toSqlString(key._1)} and ${parmC.name.identifier} = ${sqlStringerC.toSqlString(key._2)}"
     }

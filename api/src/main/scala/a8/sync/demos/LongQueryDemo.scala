@@ -15,7 +15,7 @@ import a8.shared.jdbcf.SqlString._
 
 object LongQueryDemo extends IOApp.Simple {
 
-  lazy val connR =
+  lazy val connR: Resource[IO,Conn[IO]] =
     Conn.fromNewConnection[IO](
       "jdbc:postgresql://localhost/glen".toUri, // connect URL (driver-specific)
       "glen", // user
@@ -29,7 +29,7 @@ object LongQueryDemo extends IOApp.Simple {
     sql
   }
 
-  val program =
+  val program: IO[List[Unit]] =
     connR
       .use { conn =>
         conn
